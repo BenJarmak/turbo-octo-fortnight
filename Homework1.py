@@ -1,6 +1,6 @@
 import numpy as np
 
-def findNearestEuclidean(vector, test_data, k=1, threshold=0, distance_scale=0):
+def findNearestEuclidean(vector, test_data, k=1, threshold=0, distance_scale=0, individual_scale=0):
     # 90% accurate on training data with k=1 and threshold = 0
     # 80.6% accurate on training data with k=3 and threshold = 0
     # 80.8% accurate on training data with k=3 and threshold = 25
@@ -13,7 +13,14 @@ def findNearestEuclidean(vector, test_data, k=1, threshold=0, distance_scale=0):
                 vector[i] = 0
             if line[i] < threshold:
                 line[i] = 0
-            distance += (vector[i] - line[i])**2
+            if individual_scale != 0:
+                # print((vector[i] - line[i])**2)
+                if (vector[i] - line[i])**2 < individual_scale:
+                    distance += 0.5*(vector[i] - line[i])**2
+                else:
+                    distance += 2*(vector[i] - line[i])**2
+            else:
+                distance += (vector[i] - line[i])**2
         distances.append([np.sqrt(distance), line])
     if k == 1:
         return min(distances)[1][-1]
@@ -93,10 +100,10 @@ for line in test:
         count = 0
 
 success = 0
-testdata = binarize(testdata)
-traindata = binarize(traindata)
+# testdata = binarize(testdata)
+# traindata = binarize(traindata)
 for vector in traindata:
-    nearest_neighbor = findNearestEuclidean(vector, testdata)
+    nearest_neighbor = findNearestEuclidean(vector, testdata, individual_scale=20000)
     print(vector[-1], nearest_neighbor)
     if vector[-1] == nearest_neighbor:
         success += 1
