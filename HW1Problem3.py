@@ -124,8 +124,7 @@ except:
 # validate_path = input("Enter the validation data's relative path: ")
 # validation = open('validate.txt')
 try:
-    with open(sys.argv[1], 'r') as my_file:
-        validation = (my_file.read())
+    validation = open(sys.argv[1], 'r')
 except:
     validation_path = input('test.txt was not found. Please type in its relative filepath: ')
     validation = open(validation_path)
@@ -160,7 +159,6 @@ traindata = binarize(traindata, threshold=25)
 validationdata = binarize(validationdata, threshold=25)
 for vector in validationdata:
     nearest_neighbor = findNearestManhattan(vector, traindata, k=5)
-    print(vector[-1], nearest_neighbor)
     if vector[-1] == nearest_neighbor:
         success += 1
-print(success, success/len(validationdata))
+print('The accuracy was: ', success, success/len(validationdata))
