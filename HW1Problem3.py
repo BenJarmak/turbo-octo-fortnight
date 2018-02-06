@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 
 def findNearestEuclidean(vector, test_data, k=1, threshold=0, distance_scale=0.0, individual_scale=0.0):
     distances = []
@@ -114,10 +115,20 @@ def binarize(test_data, threshold=25):
 
 #  reads the test data in
 # train_path = input("Enter the training data's relative path: ")
-test = open('train.txt')
+try:
+    test = open('train.txt')
+except:
+    test_path = input('train.txt was not found. Please type in its relative filepath: ')
+    test = open(test_path)
 
 # validate_path = input("Enter the validation data's relative path: ")
-validation = open('validate.txt')
+# validation = open('validate.txt')
+try:
+    with open(sys.argv[1], 'r') as my_file:
+        validation = (my_file.read())
+except:
+    validation_path = input('test.txt was not found. Please type in its relative filepath: ')
+    validation = open(validation_path)
 
 #  Cleans the data and then separates the test and training data
 traindata = []
@@ -145,8 +156,8 @@ for line in validation:
     validationdata.append(line_data)
 
 success = 0
-traindata = binarize(traindata, threshold=35)
-validationdata = binarize(validationdata, threshold=35)
+traindata = binarize(traindata, threshold=25)
+validationdata = binarize(validationdata, threshold=25)
 for vector in validationdata:
     nearest_neighbor = findNearestManhattan(vector, traindata, k=7)
     print(vector[-1], nearest_neighbor)
