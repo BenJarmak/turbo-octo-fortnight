@@ -159,7 +159,7 @@ success = 0
 traindata = binarize(traindata, threshold=25)
 validationdata = binarize(validationdata, threshold=25)
 for vector in validationdata:
-    nearest_neighbor = findNearestManhattan(vector, traindata, k=7)
+    nearest_neighbor = findNearestManhattan(vector, traindata, k=5)
     print(vector[-1], nearest_neighbor)
     if vector[-1] == nearest_neighbor:
         success += 1
